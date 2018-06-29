@@ -15,6 +15,44 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="images\_MG_5746.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_5821.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_5835.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_5918.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6232.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6248.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6264.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6378.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6464.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6512.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="images\_MG_6557.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
