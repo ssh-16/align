@@ -1,6 +1,7 @@
 #include <cmath>
 #include <io.h>
 #include <string>
+#include <algorithm>
 
 #include <cv.h>
 #include <highgui.h>
@@ -14,12 +15,15 @@ using namespace std;
 using namespace cv;
 using namespace cv::xfeatures2d;
 
+static const int MAX_FEATURES = 5000;
+static const float GOOD_MATCH_PERCENT = 0.2f;
+
 Mat process(Mat &color_ref, Mat &color_dst)
 {
 	Mat ref, dst;
 	cvtColor(color_ref, ref, CV_BGR2GRAY);
 	cvtColor(color_dst, dst, CV_BGR2GRAY);
-
+	
 	double min_ref, max_ref, min_dst, max_dst;
 	minMaxLoc(ref, &min_ref, &max_ref);
 	minMaxLoc(dst, &min_dst, &max_dst);
@@ -28,7 +32,7 @@ Mat process(Mat &color_ref, Mat &color_dst)
 
 	printf("min_ref=%lf, min_dst=%lf\n", min_ref, min_dst);
 
-	Ptr<Feature2D> feature = SIFT::create();	// SIFT might not be suitable for this case according to the results.
+	Ptr<Feature2D> feature = ORB::create(MAX_FEATURES);	// SIFT might not be suitable for this case according to the results.
 	vector<KeyPoint> kp_ref, kp_dst;
 	feature->detect(ref, kp_ref);
 	feature->detect(dst, kp_dst);
@@ -37,9 +41,15 @@ Mat process(Mat &color_ref, Mat &color_dst)
 	feature->compute(ref, kp_ref, desc_ref);
 	feature->compute(dst, kp_dst, desc_dst);
 
-	BFMatcher matcher;	// FlannBasedMatcher doesn't work well, too.
 	vector<DMatch> matches;
-	matcher.match(desc_ref, desc_dst, matches);
+	//BFMatcher matcher;	// FlannBasedMatcher doesn't work well, too.
+	Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce-Hamming");
+	matcher->match(desc_ref, desc_dst, matches, Mat());
+
+	sort(matches.begin(), matches.end());
+
+	const int num_good_matches = matches.size() * GOOD_MATCH_PERCENT;
+	matches.erase(matches.begin() + num_good_matches, matches.end());
 
 	vector<Point2f> p_ref;
 	vector<Point2f> p_dst;
@@ -115,13 +125,12 @@ int main()
 		work_dir + "images\\_MG_6512.jpg",
 		work_dir + "images\\_MG_6557.jpg",
 	};
-	test(ref_file, dst_file[5]);
 
-	/*
+	
 	for (int i = 1; i < 11; i++) {
 		test(ref_file, dst_file[i]);
 	}
-	*/
+	
 
 	return 0;
 }
